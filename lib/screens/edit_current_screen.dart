@@ -10,8 +10,9 @@ import 'package:intl/intl.dart';
 class EditCurrentPlanScreen extends StatefulWidget {
   final int month;
   final int year;
+  final bool showSpent;
 
-  const EditCurrentPlanScreen({Key key, this.month, this.year})
+  const EditCurrentPlanScreen({Key key, this.month, this.year, this.showSpent = true})
       : super(key: key);
 
   @override
@@ -108,6 +109,7 @@ class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
                     _sum = countSum();
                   });
                 },
+                showSpent: widget.showSpent,
               ))
         ],
       );

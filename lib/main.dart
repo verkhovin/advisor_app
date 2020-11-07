@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
               month = now.month + 1;
               year = now.year;
             }
-            return EditCurrentPlanScreen(month: month, year: year);
+            return EditCurrentPlanScreen(month: month, year: year, showSpent: false,);
           },
         },
         theme: ThemeData(

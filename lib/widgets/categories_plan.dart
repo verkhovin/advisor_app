@@ -9,8 +9,9 @@ class CategoriesPlan extends StatelessWidget {
   final PlanStatusScreenData planStatusScreenData;
   final bool editable;
   final void Function() editedCallback;
+  final bool showSpent;
 
-  CategoriesPlan(this.planStatusScreenData, {Key key, this.editable = false, this.editedCallback})
+  CategoriesPlan(this.planStatusScreenData, {Key key, this.editable = false, this.editedCallback, this.showSpent})
       : super(key: key);
 
   @override
@@ -47,7 +48,8 @@ class CategoriesPlan extends StatelessWidget {
                           planned: categoryData.planned,
                           planStatus: categoryData.status,
                           legend: true,
-                          updateValueCallback: (v) {categoryData.planned = v; editedCallback();},)
+                          updateValueCallback: (v) {categoryData.planned = v; editedCallback();},
+                  showSpent: showSpent)
                       : SpentPlannedWidget(
                           spent: categoryData.spent,
                           planned: categoryData.planned,

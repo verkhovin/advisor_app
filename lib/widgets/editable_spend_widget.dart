@@ -9,9 +9,10 @@ class EditableSpendWidget extends StatefulWidget {
   final String planStatus;
   final bool legend;
   final void Function(double) updateValueCallback;
+  final bool showSpent;
 
   final size = 20.0;
-  const EditableSpendWidget({Key key, this.spent, this.planned, this.planStatus, this.legend = false, this.updateValueCallback}) : super(key: key);
+  const EditableSpendWidget({Key key, this.spent, this.planned, this.planStatus, this.legend = false, this.updateValueCallback, this.showSpent}) : super(key: key);
 
   @override
   _EditableSpendWidgetState createState() => _EditableSpendWidgetState(planned.toStringAsFixed(2));
@@ -50,8 +51,8 @@ class _EditableSpendWidgetState extends State<EditableSpendWidget> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
           children: [
-            Expanded(flex: 5, child: buildLabel(widget.spent, "Already spent")),
-            Expanded(flex: 1, child: VerticalDivider(thickness: 1.0,)),
+            widget.showSpent ? Expanded(flex: 5, child: buildLabel(widget.spent, "Already spent")) : Container(),
+            widget.showSpent ?  Expanded(flex: 1, child: VerticalDivider(thickness: 1.0,)) : Container(),
             Expanded(flex: 5, child: TextField(controller: _textController, keyboardType: TextInputType.number,
             decoration: InputDecoration(labelText: "Plan"), onChanged: (v) {
               // widget.updateValueCallback(double.parse(v));
