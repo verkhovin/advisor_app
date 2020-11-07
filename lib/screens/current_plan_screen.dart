@@ -27,11 +27,18 @@ class _CurrentPlanScreenState extends State<CurrentPlanScreen> {
             },
           ),
           IconButton(
+            icon: const Icon(Icons.navigate_next_outlined),
+            onPressed: () {
+              Navigator.pushNamed(context, '/next');
+            },
+          ),
+          IconButton(
             icon: const Icon(Icons.edit),
             onPressed: () {
               Navigator.pushNamed(context, '/edit');
             },
-          )
+          ),
+
         ],
       ),
       body: Container(

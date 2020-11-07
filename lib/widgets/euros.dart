@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
 class Euros extends StatelessWidget {
-  final MONEY_FORMAT = new NumberFormat("# ##0.00", "en_US");
+  final MONEY_FORMAT = NumberFormat.currency(locale: 'en_US', name: '');
   final double value;
   final size;
 

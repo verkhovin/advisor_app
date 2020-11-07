@@ -14,7 +14,23 @@ class MyApp extends StatelessWidget {
         initialRoute: '/',
         routes: {
           '/': (context) => CurrentPlanScreen(),
-          '/edit': (context) => EditCurrentPlanScreen(),
+          '/edit': (context) {
+            var now = DateTime.now();
+            return EditCurrentPlanScreen(month: now.month, year: now.year);
+          },
+          '/next': (context) {
+            var now = DateTime.now();
+            var month;
+            var year;
+            if(now.month == 12) {
+              month = 1;
+              year = now.year + 1;
+            } else {
+              month = now.month + 1;
+              year = now.year;
+            }
+            return EditCurrentPlanScreen(month: month, year: year);
+          },
         },
         theme: ThemeData(
           // Define the default brightness and colors.

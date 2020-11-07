@@ -5,17 +5,29 @@ import 'package:op_advisor/backend/model/plan_status_screen_data.dart';
 import 'package:op_advisor/backend/plan.dart';
 import 'package:op_advisor/widgets/categories_plan.dart';
 import 'package:op_advisor/widgets/euros.dart';
-import 'package:op_advisor/widgets/spent_planned_widget.dart';
+import 'package:intl/intl.dart';
 
 class EditCurrentPlanScreen extends StatefulWidget {
+  final int month;
+  final int year;
+
+  const EditCurrentPlanScreen({Key key, this.month, this.year})
+      : super(key: key);
+
   @override
-  _EditCurrentPlanScreenState createState() => _EditCurrentPlanScreenState();
+  _EditCurrentPlanScreenState createState() =>
+      _EditCurrentPlanScreenState(month, year);
 }
 
 class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
-  Future<PlanStatusScreenData> _dataFuture = fetchCurrentMonthPlan();
+  Future<PlanStatusScreenData> _dataFuture;
   PlanStatusScreenData _data;
   double _sum;
+
+
+  _EditCurrentPlanScreenState(month, year) {
+    _dataFuture = fetchPlanForEdit(month, year);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +39,8 @@ class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
             icon: const Icon(Icons.check),
             onPressed: () {
               print(json.encode(_data.toJson()));
-              updateCurrentMonthPlan(_data).then((value) =>
+              updateCurrentMonthPlan(_data, widget.month, widget.year).then((
+                  value) =>
                   Navigator.pushNamedAndRemoveUntil(
                       context, '/', (r) => false));
             },
@@ -50,10 +63,22 @@ class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
     } else if (snapshot.connectionState == ConnectionState.done) {
       _data = snapshot.data;
       _sum = countSum();
+      var header;
+      if (widget.month == DateTime.now().month) {
+        header = "Your plan to spend this month";
+      } else {
+        final DateTime monthDateTime = new DateTime(2020, widget.month);
+        final DateFormat formatter = DateFormat('MMMM');
+        final String month = formatter.format(monthDateTime);
+        header = "Your plan to spend in $month";
+      }
       return Column(
         children: [
           Expanded(
-              flex: MediaQuery.of(context).viewInsets.bottom != 0 ? 0 : 3,
+              flex: MediaQuery
+                  .of(context)
+                  .viewInsets
+                  .bottom != 0 ? 0 : 3,
               child: Card(
                   margin: EdgeInsets.fromLTRB(16.0, 16.0, 16.0, 16.0),
                   color: Colors.orange[300],
@@ -61,17 +86,17 @@ class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
                     padding: const EdgeInsets.all(12.0),
                     child: Container(
                         child: Row(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
                           mainAxisAlignment: MainAxisAlignment.center,
                           children: [
-                            Text("Your plan to spend this month"),
-                            Euros(_sum, size: 30.0),
+                            Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(header),
+                                Euros(_sum, size: 30.0),
+                              ],
+                            ),
                           ],
-                        ),
-                      ],
-                    )),
+                        )),
                   ))),
           Expanded(
               flex: 10,
