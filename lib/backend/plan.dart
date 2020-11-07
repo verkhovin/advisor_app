@@ -4,6 +4,7 @@ import 'package:http/http.dart' as http;
 import 'package:op_advisor/backend/model/plan_status_screen_data.dart';
 
 import 'model/suggestion.dart';
+import 'model/transaction.dart';
 
 const host = "192.168.31.22:8080";
 
@@ -73,6 +74,22 @@ Future<List<Suggestion>> fetchSuggestions() {
   return http.get(uri, headers: {"account": "1"}).then((value) {
     Iterable list = json.decode(value.body);
     return list.map((model)=> Suggestion.fromJson(model)).toList();
+  }).catchError((onError) {
+    print(onError);
+    throw onError;
+  });
+}
+
+Future<List<Transaction>> fetchTransactions(int categoryId, int month, int year) {
+  final queryParameters = {
+    'category': categoryId.toString(),
+    'month': month.toString(),
+    'year': year.toString(),
+  };
+  final uri = Uri.http(host, '/plan/category', queryParameters);
+  return http.get(uri, headers: {"account": "1"}).then((value) {
+    Iterable list = json.decode(value.body);
+    return list.map((model)=> Transaction.fromJson(model)).toList();
   }).catchError((onError) {
     print(onError);
     throw onError;

@@ -6,7 +6,7 @@ import 'package:op_advisor/backend/model/suggestion.dart';
 import 'package:op_advisor/backend/plan.dart';
 import 'package:op_advisor/widgets/categories_plan.dart';
 import 'package:op_advisor/widgets/euros.dart';
-import 'package:intl/intl.dart';
+import 'package:op_advisor/widgets/util.dart';
 
 class EditCurrentPlanScreen extends StatefulWidget {
   final int month;
@@ -71,9 +71,7 @@ class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
       if (widget.month == DateTime.now().month) {
         header = "Your plan to spend this month";
       } else {
-        final DateTime monthDateTime = new DateTime(2020, widget.month);
-        final DateFormat formatter = DateFormat('MMMM');
-        final String month = formatter.format(monthDateTime);
+        String month = monthName(widget.month);
         header = "Your plan to spend in $month";
       }
       return Column(

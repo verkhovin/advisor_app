@@ -6,7 +6,7 @@ class Euros extends StatelessWidget {
   final double value;
   final size;
 
-  Euros(this.value, {Key key, this.size = 10}) : super(key: key);
+  Euros(this.value, {Key key, this.size = 10.0}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
