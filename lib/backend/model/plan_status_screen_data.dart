@@ -7,7 +7,7 @@ class PlanStatusScreenData {
   factory PlanStatusScreenData.fromJson(Map<String, dynamic> json) {
     return PlanStatusScreenData(
         Summary(json['summary']['spent'], json['summary']['planned']),
-        (json['categories'] as List).map((e) =>
+        (json['category'] as List).map((e) =>
             CategoryPlan(e['name'], e['spent'], e['planned'], e['status'])).toList());
   }
 }

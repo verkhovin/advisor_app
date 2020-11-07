@@ -25,7 +25,7 @@ class CategoriesPlan extends StatelessWidget {
                         buildCircleAvatar(),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: Text(categoryData.name),
+                          child: Text(categoryData.name, textAlign: TextAlign.center,),
                         )
                       ],
                     )
