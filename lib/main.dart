@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:op_advisor/screens/current_plan_screen.dart';
+import 'package:op_advisor/screens/edit_current_screen.dart';
 
 void main() {
   runApp(MyApp());
@@ -11,7 +12,10 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
         title: 'OP SpendAdvisor',
         initialRoute: '/',
-        routes: {'/': (context) => CurrentPlanScreen()},
+        routes: {
+          '/': (context) => CurrentPlanScreen(),
+          '/edit': (context) => EditCurrentPlanScreen(),
+        },
         theme: ThemeData(
           // Define the default brightness and colors.
           brightness: Brightness.light,

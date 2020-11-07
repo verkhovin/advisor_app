@@ -16,7 +16,6 @@ class _CurrentPlanScreenState extends State<CurrentPlanScreen> {
 
   @override
   Widget build(BuildContext context) {
-    
     return Scaffold(
       appBar: AppBar(
         title: Text("Current Month Plan"),
@@ -24,9 +23,13 @@ class _CurrentPlanScreenState extends State<CurrentPlanScreen> {
           IconButton(
             icon: const Icon(Icons.refresh),
             onPressed: () {
-              this.setState(() {
-
-              });
+              this.setState(() {});
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.edit),
+            onPressed: () {
+              Navigator.pushNamed(context, '/edit');
             },
           )
         ],
@@ -41,7 +44,9 @@ class _CurrentPlanScreenState extends State<CurrentPlanScreen> {
   }
 
   Widget buildScreen(AsyncSnapshot<PlanStatusScreenData> snapshot) {
-     if (snapshot.connectionState == ConnectionState.done) {
+    if (snapshot.hasError) {
+      return Text("Error occured :(");
+    } else if (snapshot.connectionState == ConnectionState.done) {
       return Column(
         children: [
           Expanded(
@@ -57,14 +62,9 @@ class _CurrentPlanScreenState extends State<CurrentPlanScreen> {
                         planStatus: "OK",
                         legend: true),
                   ))),
-          Expanded(
-              flex: 10,
-              child: CategoriesPlan(snapshot.data)
-          )
+          Expanded(flex: 10, child: CategoriesPlan(snapshot.data))
         ],
       );
-    } else if (snapshot.hasError) {
-      return Text("Error occured :(");
     } else {
       return Padding(
         padding: const EdgeInsets.all(30.0),

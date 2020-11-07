@@ -8,22 +8,32 @@ class PlanStatusScreenData {
     return PlanStatusScreenData(
         Summary(json['summary']['spent'], json['summary']['planned']),
         (json['category'] as List).map((e) =>
-            CategoryPlan(e['name'], e['spent'], e['planned'], e['status'])).toList());
+            CategoryPlan(e['id'], e['name'], e['spent'], e['planned'], e['status'])).toList());
   }
+
+  Map<String, dynamic> toJson() =>
+      {
+        'summary': null,
+        'category': this.categories.map((c) => {
+          'id': c.id,
+          'planned': c.planned
+        }).toList(),
+      };
 }
 
 class Summary {
   final double spent;
-  final double planned;
+  double planned;
 
   Summary(this.spent, this.planned);
 }
 
 class CategoryPlan {
+  final int id;
   final String name;
   final double spent;
-  final double planned;
+  double planned;
   final String status;
 
-  CategoryPlan(this.name, this.spent, this.planned, this.status);
+  CategoryPlan(this.id, this.name, this.spent, this.planned, this.status);
 }

@@ -1,19 +1,24 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:op_advisor/backend/model/plan_status_screen_data.dart';
+import 'package:op_advisor/widgets/editable_spend_widget.dart';
 import 'package:op_advisor/widgets/spent_planned_widget.dart';
+import 'package:op_advisor/widgets/util.dart';
 
 class CategoriesPlan extends StatelessWidget {
   final PlanStatusScreenData planStatusScreenData;
+  final bool editable;
+  final void Function() editedCallback;
 
-  CategoriesPlan(this.planStatusScreenData, {Key key}) : super(key: key);
+  CategoriesPlan(this.planStatusScreenData, {Key key, this.editable = false, this.editedCallback})
+      : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     List<Widget> cards = planStatusScreenData.categories.map((categoryData) {
       return Card(
           margin: EdgeInsets.fromLTRB(16.0, 5.0, 16.0, 5.0),
-          color: cardColor(categoryData.status),
+          color: editable ? null : cardColor(categoryData.status),
           child: Padding(
             padding: const EdgeInsets.all(12.0),
             child: Row(
@@ -25,7 +30,10 @@ class CategoriesPlan extends StatelessWidget {
                         buildCircleAvatar(),
                         Padding(
                           padding: const EdgeInsets.fromLTRB(0, 5, 0, 0),
-                          child: Text(categoryData.name, textAlign: TextAlign.center,),
+                          child: Text(
+                            categoryData.name,
+                            textAlign: TextAlign.center,
+                          ),
                         )
                       ],
                     )
@@ -33,10 +41,17 @@ class CategoriesPlan extends StatelessWidget {
                     ),
                 Expanded(
                   flex: 7,
-                  child: SpentPlannedWidget(
-                      spent: categoryData.spent,
-                      planned: categoryData.planned,
-                      planStatus: categoryData.status),
+                  child: editable
+                      ? EditableSpendWidget(
+                          spent: categoryData.spent,
+                          planned: categoryData.planned,
+                          planStatus: categoryData.status,
+                          legend: true,
+                          updateValueCallback: (v) {categoryData.planned = v; editedCallback();},)
+                      : SpentPlannedWidget(
+                          spent: categoryData.spent,
+                          planned: categoryData.planned,
+                          planStatus: categoryData.status),
                 ),
               ],
             ),
@@ -45,25 +60,5 @@ class CategoriesPlan extends StatelessWidget {
     return ListView(
       children: cards,
     );
-  }
-
-  CircleAvatar buildCircleAvatar() {
-    return CircleAvatar(
-                        radius: 30,
-                        backgroundColor: Colors.orange[300],
-                        child: CircleAvatar(
-                          radius: 28,
-                          backgroundColor: Colors.yellow[100],
-                        ),
-                      );
-  }
-
-  Color cardColor(String status) {
-    if (status == 'WARNING') {
-      return Colors.yellow[100];
-    } else if (status == 'OVERSPENT') {
-      return Color(0xfffa947a);
-    }
-    return Colors.green[100];
   }
 }
