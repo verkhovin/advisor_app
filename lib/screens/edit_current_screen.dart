@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:op_advisor/backend/model/plan_status_screen_data.dart';
+import 'package:op_advisor/backend/model/suggestion.dart';
 import 'package:op_advisor/backend/plan.dart';
 import 'package:op_advisor/widgets/categories_plan.dart';
 import 'package:op_advisor/widgets/euros.dart';
@@ -22,12 +23,14 @@ class EditCurrentPlanScreen extends StatefulWidget {
 
 class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
   Future<PlanStatusScreenData> _dataFuture;
+  Future<List<Suggestion>> _suggestionsFuture;
   PlanStatusScreenData _data;
   double _sum;
 
 
   _EditCurrentPlanScreenState(month, year) {
     _dataFuture = fetchPlanForEdit(month, year);
+    _suggestionsFuture = fetchSuggestions();
   }
 
   @override
@@ -110,6 +113,7 @@ class _EditCurrentPlanScreenState extends State<EditCurrentPlanScreen> {
                   });
                 },
                 showSpent: widget.showSpent,
+                suggestionsFuture: _suggestionsFuture,
               ))
         ],
       );

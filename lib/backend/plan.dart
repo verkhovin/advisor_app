@@ -3,6 +3,8 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import 'package:op_advisor/backend/model/plan_status_screen_data.dart';
 
+import 'model/suggestion.dart';
+
 const host = "192.168.31.22:8080";
 
 Future<PlanStatusScreenData> fetchCurrentMonthPlan() {
@@ -52,8 +54,7 @@ Future<PlanStatusScreenData> fetchPlanForEdit(int month, int year) {
       return PlanStatusScreenData.fromJson(json.decode(value.body));
     }
     throw Exception("Failed to fetch");
-  })
-      .catchError((onError) {
+  }).catchError((onError) {
     print(onError);
     throw onError;
   });
@@ -65,4 +66,15 @@ Map<String, String> params(int month, int year) {
     'year': year.toString(),
   };
   return queryParameters;
+}
+
+Future<List<Suggestion>> fetchSuggestions() {
+  final uri = Uri.http(host, '/plan/suggestions');
+  return http.get(uri, headers: {"account": "1"}).then((value) {
+    Iterable list = json.decode(value.body);
+    return list.map((model)=> Suggestion.fromJson(model)).toList();
+  }).catchError((onError) {
+    print(onError);
+    throw onError;
+  });
 }
