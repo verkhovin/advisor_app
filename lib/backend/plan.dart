@@ -6,11 +6,11 @@ import 'package:op_advisor/backend/model/plan_status_screen_data.dart';
 import 'model/suggestion.dart';
 import 'model/transaction.dart';
 
-const host = "192.168.31.22:8080";
+const host = "op-advisor.herokuapp.com";
 
 Future<PlanStatusScreenData> fetchCurrentMonthPlan() {
   return http
-      .get("http://$host/plan/current", headers: {"account": "1"}).then((value) {
+      .get("https://$host/plan/current", headers: {"account": "1"}).then((value) {
     return PlanStatusScreenData.fromJson(json.decode(value.body));
   }).catchError((onError) {
     print(onError);
@@ -20,7 +20,7 @@ Future<PlanStatusScreenData> fetchCurrentMonthPlan() {
 
 Future<int> updateCurrentMonthPlan(PlanStatusScreenData data, int month, int year) {
   Map<String, String> queryParameters = params(month, year);
-  final uri = Uri.http(host, '/plan', queryParameters);
+  final uri = Uri.https(host, '/plan', queryParameters);
   return http
       .put(uri,
           headers: {
@@ -33,7 +33,7 @@ Future<int> updateCurrentMonthPlan(PlanStatusScreenData data, int month, int yea
 
 Future<PlanStatusScreenData> fetchPlanForEdit(int month, int year) {
   Map<String, String> queryParameters = params(month, year);
-  final uri = Uri.http(host, '/plan', queryParameters);
+  final uri = Uri.https(host, '/plan', queryParameters);
   return http.get(uri, headers: {"account": "1"}).then((value) {
     return PlanStatusScreenData.fromJson(json.decode(value.body));
   }).then((value) {
@@ -70,7 +70,7 @@ Map<String, String> params(int month, int year) {
 }
 
 Future<List<Suggestion>> fetchSuggestions() {
-  final uri = Uri.http(host, '/plan/suggestions');
+  final uri = Uri.https(host, '/plan/suggestions');
   return http.get(uri, headers: {"account": "1"}).then((value) {
     Iterable list = json.decode(value.body);
     return list.map((model)=> Suggestion.fromJson(model)).toList();
@@ -86,7 +86,7 @@ Future<List<Transaction>> fetchTransactions(int categoryId, int month, int year)
     'month': month.toString(),
     'year': year.toString(),
   };
-  final uri = Uri.http(host, '/plan/category', queryParameters);
+  final uri = Uri.https(host, '/plan/category', queryParameters);
   return http.get(uri, headers: {"account": "1"}).then((value) {
     Iterable list = json.decode(value.body);
     return list.map((model)=> Transaction.fromJson(model)).toList();
