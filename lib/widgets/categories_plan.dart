@@ -96,14 +96,20 @@ class CategoriesPlan extends StatelessWidget {
           return Container();
         } else if (snapshot.connectionState == ConnectionState.done) {
           var data = (snapshot.data as List<Suggestion>);
-          var suggestion =
-              data.firstWhere((element) => element.id == categoryId);
+          var suggestion;
+          try {
+            suggestion = data.firstWhere((element) => element.id == categoryId,
+                orElse: null);
+          } catch(onError) {
+            suggestion = null;
+          }
           return Row(
             children: [
               Expanded(
                   flex: 5,
-                  child: Amount(
-                      20.0, suggestion.userAverage, "Your average spending")),
+                  child: suggestion != null ? Amount(
+                      20.0, suggestion.userAverage, "Your average spending")
+                  : Text(" - ")),
               Expanded(
                   flex: 1,
                   child: VerticalDivider(
@@ -111,8 +117,7 @@ class CategoriesPlan extends StatelessWidget {
                   )),
               Expanded(
                   flex: 5,
-                  child:
-                      Amount(20.0, suggestion.allAverage, "Suggested spending"))
+                  child: suggestion != null ? Amount(20.0, suggestion.allAverage, "Suggested spending") : Text(" - "))
             ],
           );
         }
